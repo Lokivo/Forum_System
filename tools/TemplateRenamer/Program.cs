@@ -31,15 +31,15 @@
             }
 
             Console.WriteLine("Renaming directories...");
-            RenameDirectories(Environment.CurrentDirectory, oldName, newName);
+            RenameDirectories(@"C:\Users\ivail\source\GitHub_repos\Forum_System\src", oldName, newName);
             Console.WriteLine("Directories renamed.");
 
             Console.WriteLine("Renaming files...");
-            RenameFiles(Environment.CurrentDirectory, oldName, newName);
+            RenameFiles(@"C:\Users\ivail\source\GitHub_repos\Forum_System\src", oldName, newName);
             Console.WriteLine("Files renamed.");
 
             Console.WriteLine("Renaming file contents...");
-            RenameFileContents(Environment.CurrentDirectory, oldName, newName);
+            RenameFileContents(@"C:\Users\ivail\source\GitHub_repos\Forum_System\src", oldName, newName);
             Console.WriteLine("File contents renamed.");
 
             Console.WriteLine("Done!");

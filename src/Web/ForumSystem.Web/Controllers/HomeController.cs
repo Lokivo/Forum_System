@@ -1,16 +1,34 @@
 ﻿namespace ForumSystem.Web.Controllers
 {
     using System.Diagnostics;
-
+    using System.Linq;
+    using ForumSystem.Data;
     using ForumSystem.Web.ViewModels;
-
+    using ForumSystem.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : BaseController
     {
+        private readonly ApplicationDbContext db;
+
+        public HomeController(ApplicationDbContext db)
+        {
+            this.db = db;
+        }
+
         public IActionResult Index()
         {
-            return this.View();
+            var viewModel = new IndexViewModel();
+            var categories = this.db.Categories.Select(x => new IndexCategoryViewModel
+            {
+                Description = x.Description,
+                ImageUrl = x.ImageURL,
+                Name = x.Name,
+                Title = x.Title,
+            }).ToList();
+            viewModel.Categories = categories;
+
+            return this.View(viewModel);
         }
 
         public IActionResult Privacy()

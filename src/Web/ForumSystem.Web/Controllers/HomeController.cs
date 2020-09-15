@@ -30,7 +30,6 @@
             return this.View(viewModel);
         }
 
-
         public IActionResult Privacy()
         {
             return this.View();

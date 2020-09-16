@@ -13,6 +13,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200913072044_imgUrls.cs" />
     <Compile Remove="Migrations\20200913072044_imgUrls.Designer.cs" />
+    <Compile Remove="Migrations\20200916090948_posts.cs" />
+    <Compile Remove="Migrations\20200916090948_posts.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

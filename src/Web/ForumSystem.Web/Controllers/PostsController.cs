@@ -46,7 +46,7 @@
             var postId = await this.postsService.CreateAsync(input.Title, input.Content, input.CategoryId, user.Id);
 
             //redirect..
-            return this.RedirectToAction("ById", new { id = postId });
+            return this.RedirectToAction(nameof(ById), new { id = postId });
         }
     }
 }

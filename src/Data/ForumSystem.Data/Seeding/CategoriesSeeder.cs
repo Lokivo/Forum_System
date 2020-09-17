@@ -22,7 +22,7 @@
                 ("News", @"https://opic.bg/images/default/news.png"),
                 ("Music", @"https://iconsplace.com/wp-content/uploads/_icons/800080/256/png/music-icon-13-256.png"),
                 ("Programming", @"https://icons-for-free.com/iconfiles/png/512/coding+dev+development+programming+tag+icon-1320165734987953368.png"),
-                ("Food",@"https://freeiconshop.com/wp-content/uploads/edd/eat-flat-1.png"),
+                ("Food", @"https://freeiconshop.com/wp-content/uploads/edd/eat-flat-1.png"),
                 ("Animals", @"https://b.thumbs.redditmedia.com/kYZCkffvs7uJHLRfXXYwxggon-91MsCHkdFXlaMq3Us.png"),
             };
 

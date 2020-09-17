@@ -28,8 +28,14 @@
 
         public IActionResult ById(int id)
         {
-            //TODO: read the post
-            return this.View(id);
+            var postViewModel = this.postsService.GetById<PostViewModel>(id);
+            if (postViewModel == null)
+            {
+                return this.NotFound();
+            }
+
+            // TODO: read the post
+            return this.View(postViewModel);
         }
 
         [Authorize]
@@ -53,8 +59,8 @@
             var user = await this.userManager.GetUserAsync(this.User);
             var postId = await this.postsService.CreateAsync(input.Title, input.Content, input.CategoryId, user.Id);
 
-            //redirect..
-            return this.RedirectToAction(nameof(ById), new { id = postId });
+            // redirect..
+            return this.RedirectToAction(nameof(this.ById), new { id = postId });
         }
     }
 }

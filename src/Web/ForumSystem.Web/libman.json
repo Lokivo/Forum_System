@@ -76,6 +76,6 @@
         "plugins/media/plugin.min.js",
         "icons/default/icons.min.js"
       ]
-    },
+    }
   ]
 }

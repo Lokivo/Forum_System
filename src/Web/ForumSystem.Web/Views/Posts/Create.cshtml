@@ -1,6 +1,7 @@
 ﻿@model ForumSystem.Web.ViewModels.Posts.PostCreateInputModel
 @{
     this.ViewData["Title"] = "New Blog Post";
+    var categories = Model.Categories.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
 }
 <h1>@this.ViewData["Title"]</h1>
 
@@ -28,8 +29,9 @@
     </div>
 
     <div>
-        <label asp-for="CategoryId">CategoryId</label>
-        <input asp-for="CategoryId" class="form-control">
+        <label asp-for="Category">CategoryId</label>
+        <select asp-for="CategoryId" asp-items="categories" class="form-control">
+        </select>
         <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
     <hr />

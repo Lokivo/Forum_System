@@ -19,8 +19,17 @@
                             <div class="text-muted small">@Model.CreatedOn</div>
                         </div>
                         <div class="text-muted small ml-3">
-                            <div><i class="fa fa-thumbs-up"></i></div>
-                            <div><i class="fa fa-thumbs-down"></i></div>
+                            <div>
+                                <a href="#" onclick="upVote(@Model.Id)">
+                                    <i class="fa fa-thumbs-up"></i>
+                                </a>
+                            </div>
+                            <div>@Model.VotesCount</div>
+                            <div>
+                                <a href="#" onclick="downVote(@Model.Id)">
+                                    <i class="fa fa-thumbs-down"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -30,7 +39,7 @@
                 <div class="card-footer d-flex flex-wrap justify-content-between align-items-center px-0 pt-0 pb-3">
                     <div class="px-4 pt-3">
                         <i class="fa fa-heart text-danger"></i>&nbsp; <span class="align-middle">Not Functional</span>
-                        
+
                         <span class="text-muted d-inline-flex align-items-center align-middle ml-4">
                             <i class="fa fa-eye text-muted fsize-3"></i>&nbsp; <span class="align-middle">Not Functional</span>
                         </span>
@@ -41,3 +50,19 @@
         </div>
     </div>
 </div>
+@section Scripts
+{
+    <script>
+        function upVote(postId) {
+            var json = { postId: postId, isUpVote: true }
+            $.post("/api/votes", json);
+            console.log(json)
+        }
+
+        function downVote(postId) {
+            var json = { postId: postId, isUpVote: false }
+            $.post("/api/votes", json);
+            console.log(json)
+        }
+    </script>
+}

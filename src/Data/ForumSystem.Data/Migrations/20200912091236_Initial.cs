@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace ForumSystem.Data.Migrations
+﻿namespace ForumSystem.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +21,7 @@ namespace ForumSystem.Data.Migrations
                     Name = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    ImageURL = table.Column<string>(nullable: true)
+                    ImageURL = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -40,7 +41,7 @@ namespace ForumSystem.Data.Migrations
                     Title = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: true),
-                    CategoryId = table.Column<int>(nullable: false)
+                    CategoryId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -72,7 +73,7 @@ namespace ForumSystem.Data.Migrations
                     PostId = table.Column<int>(nullable: false),
                     Content = table.Column<string>(nullable: true),
                     UserId = table.Column<int>(nullable: false),
-                    UserId1 = table.Column<string>(nullable: true)
+                    UserId1 = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {

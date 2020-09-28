@@ -71,6 +71,8 @@
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IPostsService, PostsService>();
             services.AddTransient<IVotesService, VotesService>();
+            services.AddTransient<ICommentsService, CommentsService>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -110,15 +112,15 @@
                 endpoints =>
                     {
                         endpoints.MapControllerRoute(
-                            "forumCategoryWithPage",
-                            "i/{name:minlength(3)}/{page}",
-                            new { controller = "Categories", action = "ByName" });
-                        endpoints.MapControllerRoute(
                             "forumCategory",
                             "i/{name:minlength(3)}",
                             new { controller = "Categories", action = "ByName" });
-                        endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-                        endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                        endpoints.MapControllerRoute(
+                            "areaRoute",
+                            "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                        endpoints.MapControllerRoute(
+                            "default",
+                            "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();
                     });
         }

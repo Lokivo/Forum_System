@@ -3,9 +3,14 @@
     this.ViewData["Title"] = Model.Title;
 }
 
+@if (this.TempData["InfoMessage"] != null)
+{
+    <div class="alert alert-success">
+        @this.TempData["InfoMessage"]
+    </div>
+}
+
 <h1>@Model.Title</h1>
-
-
 
 <div class="container-fluid mt-100">
     <div class="row">
@@ -45,16 +50,71 @@
                             <i class="fa fa-eye text-muted fsize-3"></i>&nbsp; <span class="align-middle">Not Functional</span>
                         </span>
                     </div>
-                    <div class="px-4 pt-3"> <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp; Reply</button> </div>
+                    <div class="px-4 pt-3 pb-3"> <button type="button" class="btn btn-primary" onclick="showAddCommentForm()"><i class="fa fa-plus"></i>&nbsp; Comment</button> </div>
+
+                    @foreach (var comment in this.Model.Comments)
+                    {
+                        <div class="container-fluid mt-100">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <div class="media flex-wrap w-100 align-items-center">
+                                                <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1574583246/AAA/2.jpg" class="d-block ui-w-40 rounded-circle" alt="">
+                                                <div class="media-body ml-3">
+                                                    <a href="javascript:void(0)" data-abc="true">@comment.UserUserName</a>
+                                                    <div class="text-muted small">@comment.CreatedOn</div>
+                                                </div>
+                                                <div class="text-muted small ml-3">
+                                                    <div class="px-4 pt-3"> <button type="button" class="btn btn-outline-secondary" onclick="showAddCommentForm()"><i class="fa fa-plus"></i>&nbsp; Comment</button> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            @Html.Raw(comment.SanitizedContent)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+
+
+<script src="/lib/tinymc/tinymce.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea",
+        plugins: ["image paste table link code media"]
+    });
+</script>
+
+<div id="AddCommentForm" style="display:none">
+    <form asp-controller="Comments" asp-action="Create" method="post">
+        <input type="hidden" name="PostId" value="@this.Model.Id" />
+        <div>
+            <label for="Content">Content</label>
+            <textarea name="Content" id="Content" class="form-control"></textarea>
+        </div>
+        <div>
+            <input type="submit" class="btn btn-primary" value="Add comment" />
+        </div>
+    </form>
+
+</div>
+
 @section Scripts
 {
     <script>
+        function showAddCommentForm() {
+            $("#AddCommentForm").toggle();
+        }
+
         function sendVote(postId, isUpVote) {
             var token = $("#votesForm input[name = __RequestVerificationToken]").val()
             var json = { postId: postId, isUpVote: isUpVote }
@@ -65,7 +125,7 @@
                 data: JSON.stringify(json),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                headers: {'X-CSRF-TOKEN': token},
+                headers: { 'X-CSRF-TOKEN': token },
                 success: function (data) {
                     $("#votesCount").html(data.votesCount);
                 }

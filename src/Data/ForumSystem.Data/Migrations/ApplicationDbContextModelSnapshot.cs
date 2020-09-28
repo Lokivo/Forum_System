@@ -199,22 +199,24 @@ namespace ForumSystem.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
 
+                    b.HasIndex("ParentId");
+
                     b.HasIndex("PostId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -432,6 +434,10 @@ namespace ForumSystem.Data.Migrations
 
             modelBuilder.Entity("ForumSystem.Data.Models.Comment", b =>
                 {
+                    b.HasOne("ForumSystem.Data.Models.Comment", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+
                     b.HasOne("ForumSystem.Data.Models.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
@@ -440,7 +446,7 @@ namespace ForumSystem.Data.Migrations
 
                     b.HasOne("ForumSystem.Data.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ForumSystem.Data.Models.Post", b =>
@@ -461,7 +467,7 @@ namespace ForumSystem.Data.Migrations
             modelBuilder.Entity("ForumSystem.Data.Models.Vote", b =>
                 {
                     b.HasOne("ForumSystem.Data.Models.Post", "Post")
-                        .WithMany()
+                        .WithMany("Votes")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();

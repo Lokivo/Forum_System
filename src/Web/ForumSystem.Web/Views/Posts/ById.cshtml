@@ -40,17 +40,12 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    @Html.Raw(Model.SanitizedContent)
+                    <article>
+                        @Html.Raw(Model.SanitizedContent)
+                    </article>
                 </div>
                 <div class="card-footer d-flex flex-wrap justify-content-between align-items-center px-0 pt-0 pb-3">
-                    <div class="px-4 pt-3">
-                        <i class="fa fa-heart text-danger"></i>&nbsp; <span class="align-middle">Not Functional</span>
-
-                        <span class="text-muted d-inline-flex align-items-center align-middle ml-4">
-                            <i class="fa fa-eye text-muted fsize-3"></i>&nbsp; <span class="align-middle">Not Functional</span>
-                        </span>
-                    </div>
-                    <div class="px-4 pt-3 pb-3"> <button type="button" class="btn btn-primary" onclick="showAddCommentForm()"><i class="fa fa-plus"></i>&nbsp; Comment</button> </div>
+                    <div class="px-4 pt-3 pb-3"> <button type="button" class="btn btn-primary" onclick="showAddCommentForm(0)"><i class="fa fa-plus"></i>&nbsp; Comment</button> </div>
 
                     @foreach (var comment in this.Model.Comments)
                     {
@@ -66,12 +61,16 @@
                                                     <div class="text-muted small">@comment.CreatedOn</div>
                                                 </div>
                                                 <div class="text-muted small ml-3">
-                                                    <div class="px-4 pt-3"> <button type="button" class="btn btn-outline-secondary" onclick="showAddCommentForm()"><i class="fa fa-plus"></i>&nbsp; Comment</button> </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            @Html.Raw(comment.SanitizedContent)
+                                            <article>
+                                                @Html.Raw(comment.SanitizedContent)
+                                            </article>
+                                        </div>
+                                        <div class="card-footer d-flex flex-wrap justify-content-between align-items-center px-0 pt-0 pb-3">
+                                            <div class="px-4 pt-3"> <button type="button" class="btn btn-outline-secondary" onclick="showAddCommentForm(@comment.Id)"><i class="fa fa-plus"></i>&nbsp; Comment</button> </div>
                                         </div>
                                     </div>
                                 </div>
@@ -94,9 +93,10 @@
     });
 </script>
 
-<div id="AddCommentForm" style="display:none">
-    <form asp-controller="Comments" asp-action="Create" method="post">
+<div>
+    <form asp-controller="Comments" asp-action="Create" method="post" id="AddCommentForm" style="display:none">
         <input type="hidden" name="PostId" value="@this.Model.Id" />
+        <input type="hidden" name="ParentId" value="0" />
         <div>
             <label for="Content">Content</label>
             <textarea name="Content" id="Content" class="form-control"></textarea>
@@ -111,8 +111,12 @@
 @section Scripts
 {
     <script>
-        function showAddCommentForm() {
+        function showAddCommentForm(parentId) {
+            $("#AddCommentForm input[name='ParentId']").val(parentId);
             $("#AddCommentForm").toggle();
+            $([document.documentElement, document.body]).animate({
+                scrollTop: $("#AddCommentForm").offset().top
+            }, 1000);
         }
 
         function sendVote(postId, isUpVote) {

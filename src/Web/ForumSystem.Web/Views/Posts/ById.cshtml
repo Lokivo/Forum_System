@@ -1,14 +1,56 @@
 ﻿@model ForumSystem.Web.ViewModels.Posts.PostViewModel
 @{
     this.ViewData["Title"] = Model.Title;
-}
 
+    void DisplayComments(int? parentId)
+    {
+        var comments = this.Model.Comments.Where(x => x.ParentId == parentId);
+
+        if (!comments.Any())
+        {
+            return;
+        }
+
+        @foreach (var comment in this.Model.Comments.Where(x => x.ParentId == parentId))
+        {
+            <div class="container-fluid mt-100 pt-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <div class="media flex-wrap w-100 align-items-center">
+                                    <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1574583246/AAA/2.jpg" class="d-block ui-w-40 rounded-circle" alt="">
+                                    <div class="media-body ml-3">
+                                        <a href="javascript:void(0)" data-abc="true">@comment.UserUserName</a>
+                                        <div class="text-muted small"><time datetime="@comment.CreatedOn.ToString("O")"></time></div>
+                                    </div>
+                                    <div class="text-muted small ml-3">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <article>
+                                    @Html.Raw(comment.SanitizedContent)
+                                </article>
+                            </div>
+                            <div class="card-footer d-flex flex-wrap justify-content-between align-items-center px-0 pt-0 pb-3">
+                                <div class="px-4 pt-3"> <button type="button" class="btn btn-outline-secondary" onclick="showAddCommentForm(@comment.Id) "><i class="fa fa-plus"></i>&nbsp; Comment</button> </div>
+                                @{DisplayComments(comment.Id);}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+}
 @if (this.TempData["InfoMessage"] != null)
 {
     <div class="alert alert-success">
         @this.TempData["InfoMessage"]
     </div>
 }
+
 
 <h1>@Model.Title</h1>
 
@@ -21,7 +63,7 @@
                         <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1574583246/AAA/2.jpg" class="d-block ui-w-40 rounded-circle" alt="">
                         <div class="media-body ml-3">
                             <a href="javascript:void(0)" data-abc="true">@Model.UserUserName</a>
-                            <div class="text-muted small">@Model.CreatedOn</div>
+                            <div class="text-muted small"><time datetime="@Model.CreatedOn.ToString("O")"></time></div>
                         </div>
                         <div class="text-muted small ml-3">
                             <form id="votesForm" method="post"></form>
@@ -46,42 +88,13 @@
                 </div>
                 <div class="card-footer d-flex flex-wrap justify-content-between align-items-center px-0 pt-0 pb-3">
                     <div class="px-4 pt-3 pb-3"> <button type="button" class="btn btn-primary" onclick="showAddCommentForm(0)"><i class="fa fa-plus"></i>&nbsp; Comment</button> </div>
-
-                    @foreach (var comment in this.Model.Comments)
-                    {
-                        <div class="container-fluid mt-100">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="card mb-4">
-                                        <div class="card-header">
-                                            <div class="media flex-wrap w-100 align-items-center">
-                                                <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1574583246/AAA/2.jpg" class="d-block ui-w-40 rounded-circle" alt="">
-                                                <div class="media-body ml-3">
-                                                    <a href="javascript:void(0)" data-abc="true">@comment.UserUserName</a>
-                                                    <div class="text-muted small">@comment.CreatedOn</div>
-                                                </div>
-                                                <div class="text-muted small ml-3">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            <article>
-                                                @Html.Raw(comment.SanitizedContent)
-                                            </article>
-                                        </div>
-                                        <div class="card-footer d-flex flex-wrap justify-content-between align-items-center px-0 pt-0 pb-3">
-                                            <div class="px-4 pt-3"> <button type="button" class="btn btn-outline-secondary" onclick="showAddCommentForm(@comment.Id)"><i class="fa fa-plus"></i>&nbsp; Comment</button> </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
+                    @{DisplayComments(null);}
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 
 
@@ -105,7 +118,6 @@
             <input type="submit" class="btn btn-primary" value="Add comment" />
         </div>
     </form>
-
 </div>
 
 @section Scripts
@@ -118,7 +130,6 @@
                 scrollTop: $("#AddCommentForm").offset().top
             }, 1000);
         }
-
         function sendVote(postId, isUpVote) {
             var token = $("#votesForm input[name = __RequestVerificationToken]").val()
             var json = { postId: postId, isUpVote: isUpVote }
